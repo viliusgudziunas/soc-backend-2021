@@ -17,8 +17,16 @@
       "warn",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
     ],
+    "import/extensions": "off",
+    "import/prefer-default-export": "off",
     "indent": "off",
-    "no-console": "warn",
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ],
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-unused-vars": "off"
-  }
+  },
+  "settings": { "import/resolver": { "typescript": {} } }
 }
