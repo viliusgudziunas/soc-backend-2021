@@ -23,19 +23,19 @@ export const UsersSaveAction = async (
   if (missingFields.length > 0) {
     const data = { reason: 'Fields are missing', fields: missingFields };
     const responseBody = Utils.createResponseBody('fail', data);
-    response.send(responseBody);
+    response.status(400).send(responseBody);
     return;
   }
 
   // * Email validation
   const emailRegex =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const isEmailValid = emailRegex.test(String(body.email).toLowerCase());
 
   if (!isEmailValid) {
     const data = { reason: 'Email is not valid', fields: ['email'] };
     const responseBody = Utils.createResponseBody('fail', data);
-    response.send(responseBody);
+    response.status(400).send(responseBody);
     return;
   }
 
@@ -46,7 +46,7 @@ export const UsersSaveAction = async (
   if (duplicateUsers.length > 0) {
     const data = { reason: 'Email is already in use', fields: ['email'] };
     const responseBody = Utils.createResponseBody('fail', data);
-    response.send(responseBody);
+    response.status(400).send(responseBody);
     return;
   }
 
@@ -57,7 +57,7 @@ export const UsersSaveAction = async (
       fields: ['password', 'confirmPassword'],
     };
     const responseBody = Utils.createResponseBody('fail', data);
-    response.send(responseBody);
+    response.status(400).send(responseBody);
     return;
   }
 
@@ -71,5 +71,5 @@ export const UsersSaveAction = async (
 
   delete newUser.password;
   const responseBody = Utils.createResponseBody('success', newUser);
-  response.send(responseBody);
+  response.status(201).send(responseBody);
 };
