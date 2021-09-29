@@ -5,7 +5,7 @@ import { User } from '../entities/user';
 import { ResponseService } from '../services/response-service';
 import { ValidationUtils } from '../shared/validation-utils';
 
-export const UsersSaveAction = async (
+export const UsersCreateAction = async (
   request: Request,
   response: Response
 ): Promise<void> => {

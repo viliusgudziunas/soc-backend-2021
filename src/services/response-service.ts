@@ -47,4 +47,52 @@ export const ResponseService = {
 
     return { status, data };
   },
+
+  invalidTimeFormat: (field: string): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = { reason: 'Invalid time format', fields: [field] };
+
+    return { status, data };
+  },
+
+  invalidDateFormat: (field: string): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = { reason: 'Invalid date format', fields: [field] };
+
+    return { status, data };
+  },
+
+  dateNotInRange: (
+    rangeStart: string,
+    rangeEnd: string,
+    field: string
+  ): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = {
+      reason: `Date is not in range (${rangeStart} - ${rangeEnd})`,
+      fields: [field],
+    };
+
+    return { status, data };
+  },
+
+  noAuth: (): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = {
+      reason: 'Missing authentication token',
+      headers: ['Authorization'],
+    };
+
+    return { status, data };
+  },
+
+  invalidToken: (): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = {
+      reason: 'Invalid authentication token',
+      headers: ['Authorization'],
+    };
+
+    return { status, data };
+  },
 };

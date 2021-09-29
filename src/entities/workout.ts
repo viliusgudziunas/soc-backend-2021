@@ -2,30 +2,31 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Workout } from './workout';
+import { User } from './user';
 
-@Entity({ name: 'users' })
-export class User {
+@Entity({ name: 'workouts' })
+export class Workout {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Index()
-  @Column({ unique: true })
-  email: string;
 
   @Column()
   name: string;
 
   @Column()
-  password: string;
+  caloriesBurnt: number;
 
-  @OneToMany(() => Workout, (workout) => workout.user)
-  workouts: Workout[];
+  @Column()
+  timeSpent: number;
+
+  @Column({ type: 'date' })
+  workoutDate: string;
+
+  @ManyToOne(() => User, (user) => user.workouts, { nullable: false })
+  user: User;
 
   @CreateDateColumn({
     type: 'timestamptz',
