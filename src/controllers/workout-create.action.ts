@@ -64,8 +64,8 @@ export const WorkoutCreateAction = async (
     return;
   }
 
-  const start = '01/10/2021';
-  const end = '01/11/2021';
+  const start = '2021-09-30';
+  const end = '2021-11-01';
   const workoutDate = moment(body.workoutDate, DATE_FORMAT);
   const startDate = moment(start, DATE_FORMAT);
   // TODO: Add logic to not allow dates older than today

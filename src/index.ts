@@ -1,15 +1,21 @@
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
+import { Connection, createConnection } from 'typeorm';
 import { AppRoutes } from './routes';
 
-createConnection()
+dotenv.config();
+
+const resolveConnectionByEnv = (): Promise<Connection> =>
+  process.env.ENV === 'production'
+    ? createConnection({ type: 'postgres', url: process.env.DATABASE_URL })
+    : createConnection();
+
+resolveConnectionByEnv()
   .then(async () => {
     const app = express();
     const port = 3000;
 
-    dotenv.config();
     app.use(express.json());
 
     AppRoutes.forEach((route) => {
