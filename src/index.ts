@@ -13,7 +13,7 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
       type: 'postgres',
       synchronize: true,
       url: process.env.DATABASE_URL,
-      ssl: { ca: process.env.SSL_CERT },
+      ssl: { ca: process.env.CA_CERT },
       entities: ['src/entities/**/*.ts'],
       migrations: ['src/migration/**/*.ts'],
       subscribers: ['src/subscriber/**/*.ts'],
