@@ -12,7 +12,9 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
     return createConnection({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      ssl: true,
+      extra: {
+        ssl: true,
+      },
     });
   }
 
