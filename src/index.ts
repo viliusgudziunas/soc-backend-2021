@@ -11,8 +11,12 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
   if (process.env.ENV === 'production') {
     return createConnection({
       type: 'postgres',
+      synchronize: true,
       url: process.env.DATABASE_URL,
       ssl: { ca: process.env.SSL_CERT },
+      entities: ['src/entities/**/*.ts'],
+      migrations: ['src/migration/**/*.ts'],
+      subscribers: ['src/subscriber/**/*.ts'],
     });
   }
 
