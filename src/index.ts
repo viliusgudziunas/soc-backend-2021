@@ -4,8 +4,6 @@ import 'reflect-metadata';
 import { AppRoutes } from './routes';
 
 dotenv.config();
-console.log('HTTP_PORT:', process.env.HTTP_PORT);
-console.log('PORT:', process.env.PORT);
 console.log('process.env:', process.env);
 
 // const resolveConnectionByEnv = (): Promise<Connection> =>
@@ -16,7 +14,7 @@ console.log('process.env:', process.env);
 // resolveConnectionByEnv()
 //   .then(async () => {
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(express.json());
 
