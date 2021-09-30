@@ -7,10 +7,17 @@ import { AppRoutes } from './routes';
 dotenv.config();
 console.log('process.env:', process.env);
 
-const resolveConnectionByEnv = (): Promise<Connection> =>
-  process.env.ENV === 'production'
-    ? createConnection({ type: 'postgres', url: process.env.DATABASE_URL })
-    : createConnection();
+const resolveConnectionByEnv = (): Promise<Connection> => {
+  if (process.env.ENV === 'production') {
+    return createConnection({
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      ssl: true,
+    });
+  }
+
+  return createConnection();
+};
 
 resolveConnectionByEnv()
   .then(async () => {
