@@ -5,12 +5,14 @@ import { Connection, createConnection } from 'typeorm';
 import { AppRoutes } from './routes';
 
 dotenv.config();
+console.log('process.env:', process.env);
 
 const resolveConnectionByEnv = (): Promise<Connection> => {
   if (process.env.ENV === 'production') {
     return createConnection({
       type: 'postgres',
       url: process.env.DATABASE_URL,
+      ssl: { ca: process.env.SSL_CERT },
     });
   }
 
