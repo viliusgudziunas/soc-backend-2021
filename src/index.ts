@@ -13,7 +13,7 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
       type: 'postgres',
       synchronize: true,
       url: process.env.DATABASE_URL,
-      ssl: { ca: process.env.CA_CERT },
+      ssl: { requestCert: true, ca: process.env.CA_CERT },
       entities: ['src/entities/**/*.ts'],
       migrations: ['src/migration/**/*.ts'],
       subscribers: ['src/subscriber/**/*.ts'],
@@ -45,6 +45,7 @@ resolveConnectionByEnv()
       });
     });
   })
-  .catch((error) =>
-    console.error(`TypeOrm failed to connect to db \n${error}`)
-  );
+  .catch((error) => {
+    console.error(`TypeOrm failed to connect to db \n${error}`);
+    console.log('CA_CERT:', process.env.CA_CERT);
+  });
