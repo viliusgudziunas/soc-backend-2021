@@ -17,9 +17,12 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       synchronize: true,
-      ssl: { requestCert: true, ca: process.env.CA_CERT },
       logging: true,
+      extra: { ssl: true },
+      ssl: { ca: process.env.CA_CERT },
       entities: ['src/entities/**/*.ts'],
+      migrations: ['src/migration/**/*.ts'],
+      subscribers: ['src/subscriber/**/*.ts'],
     });
   }
 
@@ -50,5 +53,5 @@ resolveConnectionByEnv()
   })
   .catch((error) => {
     console.error(`TypeOrm failed to connect to db \n${error}`);
-    console.log('CA_CERT:', process.env.CA_CERT);
+    // console.log('CA_CERT:', process.env.CA_CERT);
   });
