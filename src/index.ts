@@ -18,7 +18,6 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
       password: process.env.DB_PASSWORD,
       synchronize: true,
       logging: true,
-      extra: { ssl: true },
       ssl: { ca: process.env.CA_CERT },
       entities: ['src/entities/**/*.ts'],
       migrations: ['src/migration/**/*.ts'],
