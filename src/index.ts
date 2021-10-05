@@ -11,12 +11,15 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
   if (process.env.ENV === 'production') {
     return createConnection({
       type: 'postgres',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      database: process.env.DB_DATABASE,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
       synchronize: true,
-      url: process.env.DATABASE_URL,
       ssl: { requestCert: true, ca: process.env.CA_CERT },
+      logging: true,
       entities: ['src/entities/**/*.ts'],
-      migrations: ['src/migration/**/*.ts'],
-      subscribers: ['src/subscriber/**/*.ts'],
     });
   }
 
