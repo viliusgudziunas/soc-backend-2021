@@ -5,7 +5,6 @@ import { Connection, createConnection } from 'typeorm';
 import { AppRoutes } from './routes';
 
 dotenv.config();
-console.log('process.env:', process.env);
 
 const resolveConnectionByEnv = (): Promise<Connection> => {
   if (process.env.ENV === 'production') {
@@ -13,7 +12,7 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
       type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
-      database: process.env.DB_DATABASE,
+      database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       synchronize: true,
