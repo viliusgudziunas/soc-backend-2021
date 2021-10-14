@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import { getManager } from 'typeorm';
 import { User } from '../entities/user';
 import { Workout } from '../entities/workout';
+import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
 import { DATE_FORMAT, TIME_FORMAT } from '../shared/constants';
 import { ValidationUtils } from '../shared/validation-utils';
@@ -23,10 +23,11 @@ export const WorkoutCreateAction = async (
     return;
   }
 
-  const token = authHeader.split(' ')[1];
-  let decoded;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let decoded: any;
   try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const token = authHeader.split(' ')[1];
+    decoded = JwtService.verifyToken(token);
   } catch (error) {
     const responseBody = ResponseService.invalidToken();
     response.status(401).send(responseBody);

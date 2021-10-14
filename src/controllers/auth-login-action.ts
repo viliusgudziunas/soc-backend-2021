@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import jwt, { SignOptions } from 'jsonwebtoken';
 import { getManager } from 'typeorm';
 import { User } from '../entities/user';
+import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
 import { Utils } from '../shared/utils';
 import { ValidationUtils } from '../shared/validation-utils';
@@ -54,11 +54,12 @@ export const AuthLoginAction = async (
   // * Create auth token
   delete user.password;
   const { ...payload } = user;
-  const { JWT_SECRET, JWT_EXPIRES_TIME } = process.env;
-  const options: SignOptions = { expiresIn: JWT_EXPIRES_TIME };
-  const authToken = jwt.sign(payload, JWT_SECRET, options);
+  const authToken = JwtService.createToken('auth', payload);
 
-  const responseData = { user, authToken };
+  // * Create refresh token
+  const refreshToken = JwtService.createToken('refresh', payload);
+
+  const responseData = { user, authToken, refreshToken };
   const responseBody = ResponseService.success(responseData);
   response.status(200).send(responseBody);
 };

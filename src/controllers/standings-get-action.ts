@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import { getManager } from 'typeorm';
 import { Workout } from '../entities/workout';
-import { StandingsQueries } from '../queries/standings.query';
+import { StandingsQueries } from '../queries/standings-query';
+import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
 
 export const StandingsGetAction = async (
@@ -18,9 +18,9 @@ export const StandingsGetAction = async (
     return;
   }
 
-  const token = authHeader.split(' ')[1];
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    const token = authHeader.split(' ')[1];
+    JwtService.verifyToken(token);
   } catch (error) {
     const responseBody = ResponseService.invalidToken();
     response.status(401).send(responseBody);

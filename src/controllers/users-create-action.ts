@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { getManager } from 'typeorm';
 import { User } from '../entities/user';
+import { Env } from '../environment';
 import { ResponseService } from '../services/response-service';
 import { ValidationUtils } from '../shared/validation-utils';
 
@@ -48,7 +49,7 @@ export const UsersCreateAction = async (
   }
 
   // * Hash the password
-  const salt = await bcrypt.genSalt(+process.env.BCRYPT_ROUNDS);
+  const salt = await bcrypt.genSalt(Env.BCRYPT_ROUNDS);
   const hashedPassword = await bcrypt.hash(body.password, salt);
 
   const newUserData: User = { ...request.body, password: hashedPassword };

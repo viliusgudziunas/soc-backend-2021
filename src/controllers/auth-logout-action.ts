@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
 
 export const AuthLogoutAction = async (
@@ -15,9 +15,9 @@ export const AuthLogoutAction = async (
     return;
   }
 
-  const token = authHeader.split(' ')[1];
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    const token = authHeader.split(' ')[1];
+    JwtService.verifyToken(token);
   } catch (error) {
     const responseBody = ResponseService.invalidToken();
     response.status(401).send(responseBody);

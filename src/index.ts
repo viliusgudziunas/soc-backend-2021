@@ -1,23 +1,21 @@
-import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import { Connection, createConnection } from 'typeorm';
+import { Env } from './environment';
 import { AppRoutes } from './routes';
 
-dotenv.config();
-
 const resolveConnectionByEnv = (): Promise<Connection> => {
-  if (process.env.ENV === 'production') {
+  if (Env.ENV === 'production') {
     return createConnection({
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      database: process.env.DB_NAME,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      host: Env.DB.HOST,
+      port: Env.DB.PORT,
+      database: Env.DB.NAME,
+      username: Env.DB.USERNAME,
+      password: Env.DB.PASSWORD,
       synchronize: true,
       logging: true,
-      ssl: { ca: process.env.CA_CERT },
+      ssl: { ca: Env.DB.CA_CERT },
       entities: ['src/entities/**/*.ts'],
       migrations: ['src/migration/**/*.ts'],
       subscribers: ['src/subscriber/**/*.ts'],
@@ -30,7 +28,7 @@ const resolveConnectionByEnv = (): Promise<Connection> => {
 resolveConnectionByEnv()
   .then(async () => {
     const app = express();
-    const port = process.env.PORT;
+    const port = Env.PORT;
 
     app.use(express.json());
 
@@ -49,7 +47,6 @@ resolveConnectionByEnv()
       });
     });
   })
-  .catch((error) => {
-    console.error(`TypeOrm failed to connect to db \n${error}`);
-    // console.log('CA_CERT:', process.env.CA_CERT);
-  });
+  .catch((error) =>
+    console.error(`TypeOrm failed to connect to db \n${error}`)
+  );
