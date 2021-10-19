@@ -11,10 +11,6 @@ export const JwtService = {
         ? Env.JWT.AUTH_TOKEN_EXPIRY_TIME
         : Env.JWT.REFRESH_TOKEN_EXPIRY_TIME;
     const options: SignOptions = { expiresIn: expiryTime };
-    console.log('----------');
-    console.log('options:', options);
-    console.log('Env:', Env);
-    console.log('----------');
     const authToken = jwt.sign(payload, Env.JWT.SECRET, options);
 
     return authToken;
