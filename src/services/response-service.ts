@@ -95,4 +95,11 @@ export const ResponseService = {
 
     return { status, data };
   },
+
+  userNotFound: (param = 'userId'): ResponseBody => {
+    const status: ResponseStatus = 'fail';
+    const data = { reason: 'User not found', params: [param] };
+
+    return { status, data };
+  },
 };

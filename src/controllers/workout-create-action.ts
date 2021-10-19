@@ -3,8 +3,8 @@ import moment from 'moment';
 import { getManager } from 'typeorm';
 import { User } from '../entities/user';
 import { Workout } from '../entities/workout';
-import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
+import { ValidationService } from '../services/validation-service';
 import { DATE_FORMAT, TIME_FORMAT } from '../shared/constants';
 import { ValidationUtils } from '../shared/validation-utils';
 
@@ -12,29 +12,20 @@ export const WorkoutCreateAction = async (
   request: Request,
   response: Response
 ): Promise<void> => {
-  const { body } = request;
-
-  // TODO: add some auth protection
-  // * Token validation
   const authHeader = request.header('Authorization');
-  if (!authHeader) {
-    const responseBody = ResponseService.noAuth();
+  const validation = ValidationService.validateToken(authHeader);
+
+  if (validation.status === 'fail') {
+    const { responseBody } = validation.data;
     response.status(401).send(responseBody);
     return;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let decoded: any;
-  try {
-    const token = authHeader.split(' ')[1];
-    decoded = JwtService.verifyToken(token);
-  } catch (error) {
-    const responseBody = ResponseService.invalidToken();
-    response.status(401).send(responseBody);
-    return;
-  }
+  const { decoded }: any = validation.data;
 
   // TODO: add validation for not found user
+  const { body } = request;
   const userId = decoded.id;
   const userRepo = getManager().getRepository(User);
   const user = await userRepo.findOne(userId);

@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { getManager } from 'typeorm';
-import { User } from '../entities/user';
-import { Env } from '../environment';
-import { ResponseService } from '../services/response-service';
-import { ValidationUtils } from '../shared/validation-utils';
+import { User } from '../../entities/user';
+import { Env } from '../../environment';
+import { ResponseService } from '../../services/response-service';
+import { ValidationUtils } from '../../shared/validation-utils';
 
 export const UsersCreateAction = async (
   request: Request,

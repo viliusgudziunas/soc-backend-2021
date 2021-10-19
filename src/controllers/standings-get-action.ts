@@ -3,26 +3,18 @@ import moment from 'moment';
 import { getManager } from 'typeorm';
 import { Workout } from '../entities/workout';
 import { StandingsQueries } from '../queries/standings-query';
-import { JwtService } from '../services/jwt-service';
 import { ResponseService } from '../services/response-service';
+import { ValidationService } from '../services/validation-service';
 
 export const StandingsGetAction = async (
   request: Request,
   response: Response
 ): Promise<void> => {
-  // * Token validation
   const authHeader = request.header('Authorization');
-  if (!authHeader) {
-    const responseBody = ResponseService.noAuth();
-    response.status(401).send(responseBody);
-    return;
-  }
+  const validation = ValidationService.validateToken(authHeader);
 
-  try {
-    const token = authHeader.split(' ')[1];
-    JwtService.verifyToken(token);
-  } catch (error) {
-    const responseBody = ResponseService.invalidToken();
+  if (validation.status === 'fail') {
+    const { responseBody } = validation.data;
     response.status(401).send(responseBody);
     return;
   }
